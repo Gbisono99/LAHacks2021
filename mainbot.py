@@ -48,10 +48,10 @@ async def update_json(ctx):
 @client.command()
 async def assign_for_points(ctx):
     pass
+#@everyone
 @client.command()
 async def member_info(ctx):
     pass
-#@everyone
 @client.command()
 async def join_event(ctx,event):
     pass
