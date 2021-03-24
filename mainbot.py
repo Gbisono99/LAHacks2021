@@ -26,20 +26,28 @@ def print_format(generic_list):
     for generic in generic_list:
         description = description + f' {generic.name}'
     return description
+def member_to_person(member_list):
+    new_list = []
+    for member in member_list:
+        new_list.append(Person(name = member.name,level = 0, exp =  0.0,roles = member.roles, date = member.joined_at))
+    return new_list
 #Discord Events, not line 9.
 @client.event
 async def on_ready():
-    print('Bot is online.')
+    
     guild_global = client.get_guild(guild_id) #Server information
     server_test = ServerInfomation(guild_global.name,guild_global.members,guild_global.roles,guild_global.text_channels,guild_global.voice_channels,events)
     server_information.append(ServerInfomation(guild_global.name,guild_global.members,guild_global.roles,guild_global.text_channels,guild_global.voice_channels,events))
     print(server_information[0].member_list)
-
+    #Init all Members to Person Objects
+    all_people.extend(member_to_person(guild_global.members))
+    print(all_people)
+    print('Bot is online.')
 
     
 @client.event
 async def on_member_join(member):
-    pass
+    all_people.append(Person(member.name,0,0.0,member.roles,member.joined_at))
 
 #@Admins and @Event Organizers
 @client.command()
@@ -72,7 +80,15 @@ async def assign_for_points(ctx):
 #@everyone
 @client.command()
 async def member_info(ctx):
-    pass
+    for person in all_people:
+        if(ctx.author.name == person.name):
+            info_roles = 'Roles: \n' + print_format(person.roles)+ '\n'
+            info_level = f'Level: {person.level} \n'
+            info_exp = f'Experience: {person.exp} \n'
+            info_date = f'Date Joined: {person.date} \n'
+            description = f'{info_roles}\n{info_level}\n{info_exp}\n{info_date}'
+            embed = discord.Embed(title = f'{person.name}\'s Information', description = description)
+            await ctx.send(embed = embed)
 @client.command()
 async def join_event(ctx,event):
     pass

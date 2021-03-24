@@ -4,9 +4,10 @@ class Event:
         self.event_description = event_description #The events description
         self.points = points #The amount of points that are given per completion of said event.
 class Person:
-    def __init__(self,name,level,roles,date):
+    def __init__(self,name,level,exp,roles,date):
         self.name = name #Member's name
         self.level = level #Member's level
+        self.exp = exp #Member's exp
         self.roles = roles #this is a list of Role objects; A list of the Member's current role
         self.date = date #Member's joined date
 class ServerInfomation:
