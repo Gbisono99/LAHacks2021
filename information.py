@@ -3,8 +3,8 @@ class Event:
         self.name = name #The events name
         self.event_description = event_description #The events description
         self.points = points #The amount of points that are given per completion of said event.
-        self.event_description = event_description
-        self.date = date
+        self.participates = participates #List of Member Objects
+        self.date = date #Date object
 class Person:
     def __init__(self,name,level,exp,roles,date):
         self.name = name #Member's name

@@ -14,7 +14,7 @@ from information import ServerInfomation
 intents = discord.Intents.all()
 client = commands.Bot(command_prefix = '\\', intents = intents)
 token = 'ODI0MDM3OTc5MTMwNjkxNjI0.YFpjLA.0fkY4p7btGEDgaetEfHNVosI0B0'
-events = {} #Key = event name,  value = Event object from information.py
+events = [] #A list of Event objects from information.py. Every event information.
 all_people = [] #A list of Person objects from information.py. Basically each member's information.
 
 guild_id = 824048886746185758 #Guild's current id.
@@ -31,6 +31,22 @@ def member_to_person(member_list):
     for member in member_list:
         new_list.append(Person(name = member.name,level = 0, exp =  0.0,roles = member.roles, date = member.joined_at))
     return new_list
+def is_event_valid(event_name):
+    for event in events:
+        if event_name == event.name:
+            return True
+    return False
+def find_role_object(role_list,role_name):
+    for role in role_list:
+        if role.name == role_name:
+            return role
+    return None
+def find_list_index_people(people_list,person_name):
+    for (index,person) in zip(range(0,len(people_list)-1,people_list)):
+        if person.name == person_name:
+            return index
+    return -1
+
 #Discord Events, not line 9.
 @client.event
 async def on_ready():
@@ -90,17 +106,56 @@ async def member_info(ctx):
             embed = discord.Embed(title = f'{person.name}\'s Information', description = description)
             await ctx.send(embed = embed)
 @client.command()
-async def join_event(ctx,event):
-    pass
+async def join_event(ctx,event_name):
+    if len(event_name) == 0:
+        await ctx.send('No current events available')
+    else:
+        isValid = is_event_valid(event_name)
+        if not isValid: #if false
+            await ctx.send('Event name was invalid or does not exist')
+        else:
+            role_added = find_role_object(ctx.guild.roles,event_name)
+            await ctx.author.add_roles(role_added)
+            index = find_list_index_people(all_people, ctx.author.name)
+            all_people[index].roles.append(role_added)
+
+            index = find_list_index_people(events,event_name)
+            events[index].participates.append(ctx.author)
+
+
 @client.command()
-async def leave_event(ctx,event):
-    pass
+async def leave_event(ctx,event_name):
+    isValid = is_event_valid(event_name)
+    if not isValid:
+        await ctx.send('Event name was invalid or does not exist')
+    else:
+        role_remove = find_role_object(ctx.guild.roles, event_name)
+        await ctx.author.remove_roles(role_remove)
+        index = find_list_index_people(all_people, ctx.author.name)
+        all_people[index].roles.remove(role_remove)
+
+        index = find_list_index_people(events,event_name)
+        events[index].participates.remove(ctx.author)
 @client.command()
-async def event_information(ctx,event):
-    pass
+async def event_information(ctx,event_name):
+    description = ''
+    if len(events) == 0:
+        await ctx.send('No current events available')
+    else:
+        for event in events:
+            if event_name == event.name:
+                description = description + f'Description:{event.event_description}\nPoints:{event.points}\nDate Created:{event.date}'
+                embed = discord.Embed(title = f'{event.name}', description = description)
+                await ctx.send(embed = embed)
+            else:
+                await ctx.send('Event not found')
 @client.command()
 async def all_events(ctx):
-    pass
+    description = ''
+    for event in events:
+        description = description + f'Name:{event.name}\nDescription:{event.event_description}\nPoints:{event.points}\n==========\n'
+    embed = discord.Embed(title = f'All Events Information', description = description)
+    await ctx.send(embed = embed)
 client.run(token)
 
 #Standard Methods
