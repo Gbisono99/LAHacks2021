@@ -13,7 +13,7 @@ import random
 
 intents = discord.Intents.all()
 client = commands.Bot(command_prefix = '$', intents = intents)
-token = 'ODI0MDc1NjQzOTMwOTM1MzY2.YFqGQA.e6EVEae9iR_en-h7Mbp6PYwP9eU'
+token = 'ODI0MDc1NjQzOTMwOTM1MzY2.YFqGQA.uiWUYo-81ICUvHbBdMtItd2ur6U'
 events = {} #Key = event name,  value = Event object from information.py
 all_people = [] #A list of Person objects from information.py. Basically each member's information.
 
@@ -38,19 +38,20 @@ async def server_info(ctx):
     pass
 @client.command()
 async def event_create(ctx, *args):
+    role_perm = discord.Permissions(view_channel=False)
     if(len(args) <= 2 and len(args) != 0):
-        
         if len(args) == 2:
-            await ctx.guild.create_role(name=args[0], colour=discord.Colour(int(args[1], 16)))
-        else:
-            await ctx.guild.create_role(name=args[0], colour=discord.Colour(random.randint(0,255)))
-        
+            role = await ctx.guild.create_role(name=args[0], colour=discord.Colour(color_value), permissions=role_perm)
+
+        elif len(args) == 1:
+            role = await ctx.guild.create_role(name=args[0], colour=discord.Colour(random.randint(0,255)), permissions=role_perm)
         event_category = await ctx.guild.create_category(name=args[0])
         await event_category.create_text_channel(name=args[0])
         await event_category.create_voice_channel(name=args[0])
-
+        await category.set_permissions(role, read_messages=True, send_messages=True, connect=True, speak=True)
+        await category.set_permissions(ctx.guild.default_role, read_messages=False, connect=False)
     else:
-        await ctx.send(ctx.guild.roles(name=args[0]))
+        await ctx.send(f'Expected 2 or 1 Input Arguments; Received {len(args)}')
 
 @client.command()
 async def event_delete(ctx):
