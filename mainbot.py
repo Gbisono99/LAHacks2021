@@ -8,11 +8,12 @@ from discord.ext.commands import Context
 import asyncio
 from information import Event
 from information import Person
+import random
 
 
 intents = discord.Intents.all()
 client = commands.Bot(command_prefix = '$', intents = intents)
-token = 'ODI0MDM3OTc5MTMwNjkxNjI0.YFpjLA.0fkY4p7btGEDgaetEfHNVosI0B0'
+token = 'ODI0MDc1NjQzOTMwOTM1MzY2.YFqGQA.e6EVEae9iR_en-h7Mbp6PYwP9eU'
 events = {} #Key = event name,  value = Event object from information.py
 all_people = [] #A list of Person objects from information.py. Basically each member's information.
 
@@ -25,6 +26,8 @@ server = None #Initalized to None but on_ready() will set it to the given server
 async def on_ready():
     print('Bot is online.')
     server = client.get_guild(guild_id) #Server information
+    
+
 @client.event
 async def on_member_join(member):
     pass
@@ -34,8 +37,15 @@ async def on_member_join(member):
 async def server_info(ctx):
     pass
 @client.command()
-async def event_create(ctx):
-    pass
+async def event_create(ctx, *args):
+    if(len(args) <= 2 and len(args) != 0):
+        if len(args) == 2:
+            await ctx.guild.create_role(name=args[0], colour=discord.Colour(int(args[1], 16)))
+        else:
+            await ctx.guild.create_role(name=args[0], colour=discord.Colour(random.randint(0,255)))
+    else:
+        await ctx.send(ctx.guild.roles(name=args[0]))
+
 @client.command()
 async def event_delete(ctx):
     pass
