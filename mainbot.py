@@ -39,10 +39,16 @@ async def server_info(ctx):
 @client.command()
 async def event_create(ctx, *args):
     if(len(args) <= 2 and len(args) != 0):
+        
         if len(args) == 2:
             await ctx.guild.create_role(name=args[0], colour=discord.Colour(int(args[1], 16)))
         else:
             await ctx.guild.create_role(name=args[0], colour=discord.Colour(random.randint(0,255)))
+        
+        event_category = await ctx.guild.create_category(name=args[0])
+        await event_category.create_text_channel(name=args[0])
+        await event_category.create_voice_channel(name=args[0])
+
     else:
         await ctx.send(ctx.guild.roles(name=args[0]))
 
