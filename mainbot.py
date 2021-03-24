@@ -21,14 +21,22 @@ guild_id = 824048886746185758 #Guild's current id.
 guild_global = None #Initalized to None but on_ready() will set it to the given server.
 #A list of Roles might be useful?
 server_information = [] #Server information
-
+def print_format(generic_list):
+    description = ''
+    for generic in generic_list:
+        description = description + f' {generic.name}'
+    return description
 #Discord Events, not line 9.
 @client.event
 async def on_ready():
     print('Bot is online.')
     guild_global = client.get_guild(guild_id) #Server information
+    server_test = ServerInfomation(guild_global.name,guild_global.members,guild_global.roles,guild_global.text_channels,guild_global.voice_channels,events)
     server_information.append(ServerInfomation(guild_global.name,guild_global.members,guild_global.roles,guild_global.text_channels,guild_global.voice_channels,events))
     print(server_information[0].member_list)
+
+
+    
 @client.event
 async def on_member_join(member):
     pass
@@ -36,16 +44,16 @@ async def on_member_join(member):
 #@Admins and @Event Organizers
 @client.command()
 async def server_info(ctx):
-    temp = serverformat(server_information[0].member_list)
-    #info_members = f'Members: \n {temp} \n'
-    #info_roles = 'Roles: \n' + serverformat(server_information.roles_list) + '\n'
-    #info_texts = 'Texts: \n' + serverformat(server_information.texts_list) + '\n'
-    #info_voices = 'Voices: \n' + serverformat(server_information.voice_list) + '\n'
-    #info_events = 'Current Events: \n' + serverformat(server_information.curr_event_list) + '\n'
+    info_name = server_information[0].name
+    info_members = 'Members: \n' + print_format(server_information[0].member_list)+ '\n'
+    info_roles = 'Roles: \n' + print_format(server_information[0].roles_list)+ '\n'
+    info_texts = 'Texts: \n' + print_format(server_information[0].text_list)+ '\n'
+    info_voices = 'Voices: \n' + print_format(server_information[0].voice_list)+ '\n'
+    info_events = 'Current Events: \n' + print_format(server_information[0].curr_event_list)+ '\n'
 
-    #description = f'{info_members}+{info_roles}+{info_texts}+{info_voices}+{info_events}'
-    #embed = discord.Embed(title = f'{server_information.name}\'s Server Information', description = description)
-    #await ctx.send(embed = embed)
+    description = f'{info_members}\n{info_roles}\n{info_texts}\n{info_voices}\n{info_events}'
+    embed = discord.Embed(title = f'{info_name}\'s Server Information', description = description)
+    await ctx.send(embed = embed)
 @client.command()
 async def event_create(ctx):
     pass
@@ -80,11 +88,4 @@ async def all_events(ctx):
 client.run(token)
 
 #Standard Methods
-def serverformat(generic_list):
-    description = ''
-    #if generic_list != None:
-    for generic in generic_list:
-        description = description + f'{generic.name}, '
-    return description     
-    #else:
-        #return f'No given information available.'
+
