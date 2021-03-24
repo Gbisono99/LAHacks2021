@@ -1,8 +1,10 @@
 class Event:
-    def __init__(self,name,event_description,points):
+    def __init__(self,name,event_description,points,participates,date):
         self.name = name #The events name
         self.event_description = event_description #The events description
         self.points = points #The amount of points that are given per completion of said event.
+        self.event_description = event_description
+        self.date = date
 class Person:
     def __init__(self,name,level,exp,roles,date):
         self.name = name #Member's name
