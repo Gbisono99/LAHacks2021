@@ -139,7 +139,7 @@ async def event_delete(ctx, arg):
 #async def update_json(ctx):
 #    pass
 @client.command()
-async def change_event_points(ctx):
+async def change_points(ctx):
     pass
 @client.command()
 async def event_close(ctx):
@@ -215,3 +215,4 @@ client.run(token)
 
 #Standard Methods
 
+ 
