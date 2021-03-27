@@ -10,11 +10,6 @@ from information import Event
 from information import Person
 from information import ServerInfomation
 import random
-import json
-import jsonpickle
-from json import JSONEncoder
-import os.path
-from os import path
 
 
 intents = discord.Intents.all()
@@ -139,10 +134,19 @@ async def event_delete(ctx, arg):
 #async def update_json(ctx):
 #    pass
 @client.command()
-async def change_points(ctx):
+async def change_points(ctx, event_name, points):
+    index = find_list_index_people(events,event_name)
+    event_object = find_object(events, event_name)
+    isValid = is_event_valid(event_name)
+    if isValid:
+        
+    #description = f'Instead of {event_object.points}, how many points should the event be worth?'
+    #embed = discord.Embed(title = f'{event_object}', description = description, colour = 0xff9900)
+    
+
     pass
 @client.command()
-async def event_close(ctx):
+async def event_close(ctx, event_name):
     pass
 #@everyone
 @client.command()
