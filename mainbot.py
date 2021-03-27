@@ -21,6 +21,7 @@ guild_id = 824048886746185758 #Guild's current id.
 guild_global = client.get_guild(guild_id) #Initalized to None but on_ready() will set it to the given server.
 #A list of Roles might be useful?
 server_information = [] #Server information
+level_list = [83,174,276,388,512] #List of level up.
 def print_format(generic_list):
     description = ''
     for generic in generic_list:
@@ -29,7 +30,7 @@ def print_format(generic_list):
 def member_to_person(member_list):
     new_list = []
     for member in member_list:
-        new_list.append(Person(name = member.name,level = 0, exp =  0.0,roles = member.roles, date = member.joined_at))
+        new_list.append(Person(name = member.name,level = 0, exp =  0,roles = member.roles, date = member.joined_at))
     return new_list
 def is_event_valid(event_name):
     for event in events:
@@ -136,18 +137,45 @@ async def event_delete(ctx, arg):
 @client.command()
 async def change_points(ctx, event_name, points):
     index = find_list_index_people(events,event_name)
-    event_object = find_object(events, event_name)
     isValid = is_event_valid(event_name)
     if isValid:
-        
+        events[index].points = int(points,10)
+        await ctx.send('Points have been updated!')
     #description = f'Instead of {event_object.points}, how many points should the event be worth?'
     #embed = discord.Embed(title = f'{event_object}', description = description, colour = 0xff9900)
-    
-
-    pass
+    else:
+        await ctx.send('Not a valid event.')
 @client.command()
 async def event_close(ctx, event_name):
-    pass
+    #Check if the event exists
+    isValid = is_event_valid(event_name)
+    event_object = find_object(events, event_name)
+    #if True, give every participates in event_name that amount of experience
+    if isValid:
+        ##do a check for every member and see if they will gain a level if they have enough exp
+        for member in event_object.participates:
+            person = find_object(all_people,member.name)
+            index = find_list_index_people(all_people,person.name)
+            print(index)
+            print(person.name)
+            person.exp = person.exp + event_object.points
+            if person.level == len(level_list):
+                person.exp = 0
+                await ctx.send(f'{person.name} has reached max level. Current Exp is set to 0.')
+            else:
+                if person.exp >= level_list[person.level]:
+                    person.level = int(person.level) + 1
+                    await ctx.send(f'{person.name} has reached Level: {person.level}!')
+            #await level_up(curr_person)
+        ###if levelup = True, have that member gain a level and have exp reset.
+        ###else, just add exp.
+            all_people[index] = person
+        await ctx.invoke(event_delete,event_name)
+        await ctx.send(f'{event_name} has officially been closed. Thanks to all for participating!')
+    else:
+        #else, let the user know.
+        await ctx.send('Event name was invalid or does not exist')
+
 #@everyone
 @client.command()
 async def member_info(ctx):
