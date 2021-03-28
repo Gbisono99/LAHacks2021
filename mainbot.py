@@ -14,12 +14,12 @@ import random
 
 intents = discord.Intents.all()
 client = commands.Bot(command_prefix = '\\', intents = intents, help_command = None)
-token = 'ODI0MDM3OTc5MTMwNjkxNjI0.YFpjLA.1WX89fBb8-gGgQGlBiC-rzeAtA0'
+token = #ENTER YOUR BOT TOKEN!----------------------------------------------------------------------------
 events = [] #A list of Event objects from information.py. Every event information.
 all_people = [] #A list of Person objects from information.py. Basically each member's information.
-guild_id = 819466524070379550 #Guild's current id.
+guild_id = #ENTER YOUR GUILD ID HERE! #Guild's current id.------------------------------------------------
 guild_global = client.get_guild(guild_id) #Initalized to None but on_ready() will set it to the given server.
-#A list of Roles might be useful?
+
 server_information = [] #Server information
 level_list = [83,174,276,388,512] #List of level up.
 def print_format(generic_list):
@@ -60,10 +60,6 @@ async def on_ready():
         role_perm = discord.Permissions(view_channel = False)
         await guild_global.create_role(name='Event Organizer', colour= 0x00C422, permissions=role_perm)
     print('Bot is online.')
-
-    #with open('data.txt', 'w') as json_file:
-        #encodeJSON = jsonpickle.encode(server_information[0])
-        #json.dump(encodeJSON, json_file, indent=4,sort_keys=True)
 @client.event
 async def on_member_join(member):
     all_people.append(Person(member.name,0,0.0,member.roles,member.joined_at))
@@ -84,7 +80,6 @@ async def server_info(ctx):
     description = f'{info_members}\n{info_roles}\n{info_texts}\n{info_voices}\n{info_events}'
     embed = discord.Embed(title = f'{info_name}\'s Server Information', description = description, color = 0x00C422)
     await ctx.send(embed = embed)
-# $events_create {event_name} {role_color} {event_description} {points}
 @client.command(aliases = ['ecreate','createevent'])
 @commands.has_role('Event Organizer')
 async def event_create(ctx, *args):
@@ -149,10 +144,6 @@ async def event_delete(ctx, arg):
         else:
             embed = discord.Embed(title = f'Changing Points', description = 'Not a valid event! D:', color = 0xC70039)
             await ctx.send(embed = embed)        
-    #Try using server_information[0]
-#@client.command()
-#async def update_json(ctx):
-#    pass
 @client.command(aliases = ['epoints','changepointsevent'])
 @commands.has_role('Event Organizer')
 async def change_points(ctx, event_name, points):
