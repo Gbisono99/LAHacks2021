@@ -1,6 +1,6 @@
 # LAHacks2021
 ## About
-Event Bot is the bot that helps engage server members with simple events and level ups!
+Event Bot allows servers to create amazing events with a unique leveling up system to help increase server participation and member interaction.
 ## Commands
 ### Member Commands
 These commands are accessable to anybody on the server.
