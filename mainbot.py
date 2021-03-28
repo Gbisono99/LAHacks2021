@@ -17,7 +17,7 @@ client = commands.Bot(command_prefix = '\\', intents = intents, help_command = N
 token = 'ODI0MDM3OTc5MTMwNjkxNjI0.YFpjLA.1WX89fBb8-gGgQGlBiC-rzeAtA0'
 events = [] #A list of Event objects from information.py. Every event information.
 all_people = [] #A list of Person objects from information.py. Basically each member's information.
-guild_id = 824048886746185758 #Guild's current id.
+guild_id = 819466524070379550 #Guild's current id.
 guild_global = client.get_guild(guild_id) #Initalized to None but on_ready() will set it to the given server.
 #A list of Roles might be useful?
 server_information = [] #Server information
@@ -248,7 +248,7 @@ async def join_event(ctx,event_name):
             all_people[index].roles.append(role_added)
             index = find_list_index_people(events,event_name)
             events[index].participates.append(ctx.author)
-            embed = discord.Embed(title = f'Name of Event: {event_name}', description = f'User: {ctx.author} has joined this event!', color = role_added.color)
+            embed = discord.Embed(title = f'Name of Event: {event_name}', description = f'User: {ctx.author.name} has joined this event!', color = role_added.color)
             await ctx.send(embed = embed)
 
 @client.command(aliases = ['eleave','levent','leaveevent'])
@@ -268,7 +268,7 @@ async def leave_event(ctx,event_name):
             all_people[index].roles.remove(role_remove)
             index = find_list_index_people(events,event_name)
             events[index].participates.remove(ctx.author)
-            embed = discord.Embed(title = f'Name of Event: {event_name}', description = 'User: {ctx.author} has leave this event!', color = role_remove.color)
+            embed = discord.Embed(title = f'Name of Event: {event_name}', description = f'User: {ctx.author.name} has left this event!', color = role_remove.color)
             await ctx.send(embed = embed)
 
 @client.command(aliases = ['einfo','eventinfo'])
