@@ -28,7 +28,7 @@ These commands are only accessable to people with the "Event Organizer' role.
 #### Deleting an Event
 * Commands: \event_delete \edelete \deleteevent
 * Instruction: \<COMMAND> <EVENT NAME>
-#### Chaning Points in Event
+#### Changing Points in Event
 * Commands: \change_points \epoints \changepointsevent
 * Instruction: \<COMMAND> <EVENT NAME> <NEW POINT VALUE>
 #### Closing an Event
